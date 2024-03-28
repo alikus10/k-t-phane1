@@ -38,7 +38,8 @@
             this.üye_ekle_btn.Location = new System.Drawing.Point(95, 62);
             this.üye_ekle_btn.Name = "üye_ekle_btn";
             this.üye_ekle_btn.Size = new System.Drawing.Size(131, 77);
-            this.üye_ekle_btn.TabIndex = 0;
+            this.üye_ekle_btn.TabIndex = 1;
+            this.üye_ekle_btn.TabStop = false;
             this.üye_ekle_btn.Text = "Üye Ekle";
             this.üye_ekle_btn.UseVisualStyleBackColor = true;
             this.üye_ekle_btn.Click += new System.EventHandler(this.üye_ekle_btn_Click);
@@ -48,7 +49,8 @@
             this.kitap_ekle_btn.Location = new System.Drawing.Point(95, 163);
             this.kitap_ekle_btn.Name = "kitap_ekle_btn";
             this.kitap_ekle_btn.Size = new System.Drawing.Size(131, 77);
-            this.kitap_ekle_btn.TabIndex = 0;
+            this.kitap_ekle_btn.TabIndex = 1;
+            this.kitap_ekle_btn.TabStop = false;
             this.kitap_ekle_btn.Text = "Kitap Ekle";
             this.kitap_ekle_btn.UseVisualStyleBackColor = true;
             this.kitap_ekle_btn.Click += new System.EventHandler(this.kitap_ekle_btn_Click);
@@ -58,7 +60,8 @@
             this.emanet_btn.Location = new System.Drawing.Point(95, 266);
             this.emanet_btn.Name = "emanet_btn";
             this.emanet_btn.Size = new System.Drawing.Size(131, 77);
-            this.emanet_btn.TabIndex = 0;
+            this.emanet_btn.TabIndex = 1;
+            this.emanet_btn.TabStop = false;
             this.emanet_btn.Text = "Emanet İşlemleri";
             this.emanet_btn.UseVisualStyleBackColor = true;
             this.emanet_btn.Click += new System.EventHandler(this.emanet_btn_Click);

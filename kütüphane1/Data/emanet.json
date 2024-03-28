@@ -1,0 +1,17 @@
+[
+  {
+    "Uye": {
+      "Ad": "ali",
+      "Soyad": "kus",
+      "Email": "kusali1111@gmail.com",
+      "Telefon": "05333333333"
+    },
+    "Kitap": {
+      "ISBN": "123456",
+      "Ad": "ateşten gömlek",
+      "Yazar": "halide edip adıvar"
+    },
+    "EmanetTarihi": "2024-03-29T01:24:44.2103284+03:00",
+    "TeslimTarihi": "2024-03-29T01:24:44.2063375+03:00",
+  }
+]
