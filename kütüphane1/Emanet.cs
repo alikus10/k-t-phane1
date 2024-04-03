@@ -19,28 +19,23 @@ namespace kütüphane1
 
         private void ekle3_btn_Click(object sender, EventArgs e)
         {
-            // Kullanıcı arayüzünden emanet bilgilerini alın
             string uyeAd = textBox1.Text;
             string kitapISBN = textBox2.Text;
             DateTime emanetTarihi = dateTimePicker1.Value;
             DateTime teslimTarihi = dateTimePicker2.Value;
 
-            // Mevcut üyeler ve kitaplar listelerini alın
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
             List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
 
-            // Uygun üye ve kitabı bulun
             Uye uye = uyeler.Find(u => u.Ad == uyeAd);
             Kitap kitap = kitaplar.Find(k => k.ISBN == kitapISBN);
 
-            // Eğer uygun üye veya kitap bulunamazsa, kullanıcıya bilgi verin
             if (uye == null || kitap == null)
             {
                 MessageBox.Show("Üye veya kitap bulunamadı. Lütfen geçerli bir üye adı ve kitap ISBN numarası girin.");
                 return;
             }
 
-            // Alınan bilgilerle yeni bir Emanet nesnesi oluşturun
             Emanet yeniEmanet = new Emanet
             {
                 Uye = uye,
@@ -49,17 +44,41 @@ namespace kütüphane1
                 TeslimTarihi = teslimTarihi
             };
 
-            // Mevcut emanetler listesini alın
             List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
-
-            // Yeni emaneti mevcut emanetler listesine ekleyin
             emanetler.Add(yeniEmanet);
 
-            // Güncellenmiş emanetler listesini JSON dosyasına kaydedin
             KutuphaneIslemleri.EmanetKaydet(emanetler);
 
-            // Kullanıcıya emanet işleminin başarıyla gerçekleştirildiğine dair bir mesaj gösterin
             MessageBox.Show("Emanet işlemi başarıyla gerçekleştirildi.");
         }
+
+        private void emanet_al_btn_Click(object sender, EventArgs e)
+        {
+            // Seçilen üye adını ve kitap ISBN numarasını alalım
+            string uyeAd = textBox1.Text; // Üye adının textBox1'e girildiği varsayılarak
+            string kitapISBN = textBox2.Text; // Kitap ISBN numarasının textBox2'ye girildiği varsayılarak
+
+            // Kayıtlı emanetleri okuyalım
+            List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
+
+            // Emaneti bulalım (üye adı ve kitap ISBN numarasına göre arama)
+            Emanet alinacakEmanet = emanetler.Find(em => em.Uye.Ad == uyeAd && em.Kitap.ISBN == kitapISBN);
+
+            // Eğer böyle bir emanet bulunamadıysa uyarı verelim
+            if (alinacakEmanet == null)
+            {
+                MessageBox.Show("Belirtilen emanet bulunamadı.");
+                return;
+            }
+
+            // Emaneti listeden kaldıralım
+            emanetler.Remove(alinacakEmanet);
+
+            // Değişiklikleri kaydedelim
+            KutuphaneIslemleri.EmanetKaydet(emanetler);
+
+            MessageBox.Show("Emanet başarıyla geri alındı.");
+        }
+
     }
 }

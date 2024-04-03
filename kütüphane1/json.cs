@@ -70,20 +70,41 @@ namespace kütüphane1
 
         public static void EmanetKaydet(List<Emanet> emanetler)
         {
-  try
-    {
-        using (StreamWriter file = File.CreateText(EmanetDosyaYolu))
-        {
-            JsonSerializer serializer = new JsonSerializer();
-            serializer.Serialize(file, emanetler);
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Dosyaya yazma hatası: " + ex.Message);
-    }
+           
+                try
+                {
+                    // Yalnızca istenilen alanları içeren geçici bir liste oluştur
+                    var tempEmanetler = emanetler.Select(e => new
+                    {
+                        Uye = new
+                        {
+                            e.Uye.Ad,
+                            e.Uye.Soyad,
+                            e.Uye.Email,
+                            e.Uye.Telefon
+                        },
+                        Kitap = new
+                        {
+                            e.Kitap.ISBN,
+                            e.Kitap.Ad,
+                            e.Kitap.Yazar
+                        },
+                        e.EmanetTarihi,
+                        e.TeslimTarihi
+                    }).ToList();
 
-        }
+                    // Geçici liste üzerinden JSON dosyasını oluştur
+                    string json = JsonConvert.SerializeObject(tempEmanetler);
+                    File.WriteAllText(EmanetDosyaYolu, json);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Dosyaya yazma hatası: " + ex.Message);
+                }
+            }
+
+
+        
 
 
         public static List<Emanet> EmanetOku()

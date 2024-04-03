@@ -13,9 +13,9 @@ namespace kütüphane1
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string Email { get; set; }
-        public string Telefon { get; set; }  
-        
-        
+        public string Telefon { get; set; }
+
+
     }
 
     // Kitap sınıfı
@@ -24,7 +24,7 @@ namespace kütüphane1
         public string ISBN { get; set; }
         public string Ad { get; set; }
         public string Yazar { get; set; }
-        
+
     }
 
     // Emanet sınıfı
@@ -36,4 +36,3 @@ namespace kütüphane1
         public DateTime TeslimTarihi { get; set; } // Teslim tarihi
     }
 }
-

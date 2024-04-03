@@ -19,14 +19,11 @@ namespace kütüphane1
 
         private void ekle1_btn_Click(object sender, EventArgs e)
         {
-            // Kullanıcı arayüzünden üye bilgilerini alın
             string ad = textBox1.Text;
             string soyad = textBox2.Text;
             string e_mail = textBox3.Text;
             string telefon = textBox4.Text;
-            
 
-            // Alınan bilgilerle yeni bir Uye nesnesi oluşturun
             Uye yeniUye = new Uye
             {
                 Ad = ad,
@@ -35,17 +32,85 @@ namespace kütüphane1
                 Telefon = telefon
             };
 
-            // Mevcut üyeler listesini alın
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
-
-            // Yeni üyeyi mevcut üyeler listesine ekleyin
             uyeler.Add(yeniUye);
 
-            // Güncellenmiş üyeler listesini JSON dosyasına kaydedin
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
-            // Kullanıcıya ekleme işleminin başarıyla gerçekleştirildiğine dair bir mesaj gösterin
             MessageBox.Show("Üye başarıyla eklendi.");
+
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox4.Clear();
+        }
+
+        private void üye_sil_btn_Click(object sender, EventArgs e)
+        {
+            string ad = textBox1.Text;
+            string soyad = textBox2.Text;
+
+            List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
+
+            Uye silinecekUye = uyeler.Find(u => u.Ad == ad && u.Soyad == soyad);
+
+            if (silinecekUye == null)
+            {
+                MessageBox.Show("Belirtilen üye bulunamadı.");
+                return;
+            }
+
+            uyeler.Remove(silinecekUye);
+            KutuphaneIslemleri.UyeKaydet(uyeler);
+
+            MessageBox.Show("Üye başarıyla silindi.");
+
+            textBox1.Clear();
+            textBox2.Clear();
+        }
+
+        private void üye_güncelle_btn_Click(object sender, EventArgs e)
+        {
+            string ad = textBox1.Text;
+            string soyad = textBox2.Text;
+
+            List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
+
+            Uye güncellenecekUye = uyeler.Find(u => u.Ad == ad && u.Soyad == soyad);
+
+            if (güncellenecekUye == null)
+            {
+                MessageBox.Show("Belirtilen üye bulunamadı.");
+                return;
+            }
+
+            string yeniAd = textBox5.Text;
+            string yeniSoyad = textBox6.Text;
+            string yeniEmail = textBox7.Text;
+            string yeniTelefon = textBox8.Text;
+
+            if (string.IsNullOrWhiteSpace(yeniAd) || string.IsNullOrWhiteSpace(yeniSoyad) || string.IsNullOrWhiteSpace(yeniEmail) || string.IsNullOrWhiteSpace(yeniTelefon))
+            {
+                MessageBox.Show("Lütfen tüm alanları doldurun.");
+                return;
+            }
+
+            güncellenecekUye.Ad = yeniAd;
+            güncellenecekUye.Soyad = yeniSoyad;
+            güncellenecekUye.Email = yeniEmail;
+            güncellenecekUye.Telefon = yeniTelefon;
+
+            KutuphaneIslemleri.UyeKaydet(uyeler);
+
+            MessageBox.Show("Üye bilgileri başarıyla güncellendi.");
+
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox5.Clear();
+            textBox6.Clear();
+            textBox7.Clear();
+            textBox8.Clear();
         }
     }
+
 }

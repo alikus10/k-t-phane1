@@ -20,34 +20,61 @@ namespace kütüphane1
 
         private void ekle2_btn_Click(object sender, EventArgs e)
         {
-            
-                // Kullanıcı arayüzünden kitap bilgilerini alın
-                string ad = textBox1.Text;
-                string isbn = textBox2.Text;
-                string yazar = textBox3.Text;
-                
-                // Alınan bilgilerle yeni bir Kitap nesnesi oluşturun
-                Kitap yeniKitap = new Kitap
-                {
-                    ISBN = isbn,
-                    Ad = ad,
-                    Yazar = yazar,
-                   
-                };
 
-                // Mevcut kitaplar listesini alın
-                List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
+            // Kullanıcı arayüzünden kitap bilgilerini alın
+            string ad = textBox1.Text;
+            string isbn = textBox2.Text;
+            string yazar = textBox3.Text;
 
-                // Yeni kitabı mevcut kitaplar listesine ekleyin
-                kitaplar.Add(yeniKitap);
+            // Alınan bilgilerle yeni bir Kitap nesnesi oluşturun
+            Kitap yeniKitap = new Kitap
+            {
+                ISBN = isbn,
+                Ad = ad,
+                Yazar = yazar,
 
-                // Güncellenmiş kitaplar listesini JSON dosyasına kaydedin
-                KutuphaneIslemleri.KitapKaydet(kitaplar);
+            };
 
-                // Kullanıcıya ekleme işleminin başarıyla gerçekleştirildiğine dair bir mesaj gösterin
-                MessageBox.Show("Kitap başarıyla eklendi.");
+            // Mevcut kitaplar listesini alın
+            List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
+
+            // Yeni kitabı mevcut kitaplar listesine ekleyin
+            kitaplar.Add(yeniKitap);
+
+            // Güncellenmiş kitaplar listesini JSON dosyasına kaydedin
+            KutuphaneIslemleri.KitapKaydet(kitaplar);
+
+            // Kullanıcıya ekleme işleminin başarıyla gerçekleştirildiğine dair bir mesaj gösterin
+            MessageBox.Show("Kitap başarıyla eklendi.");
+        }
+        private void kitap_sil_btn_Click(object sender, EventArgs e)
+        {
+            // Silmek istediğimiz kitabın adını ve ISBN numarasını alalım
+            string kitapAdi = textBox1.Text; // Kitabın adının textBox1'e girildiği varsayılarak
+            string kitapISBN = textBox2.Text; // Kitabın ISBN numarasının textBox2'ye girildiği varsayılarak
+
+            // Kayıtlı kitapları okuyalım
+            List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
+
+            // Silmek istediğimiz kitabı bulalım (ad ve ISBN numarasına göre arama)
+            Kitap silinecekKitap = kitaplar.Find(k => k.Ad == kitapAdi && k.ISBN == kitapISBN);
+
+            // Eğer böyle bir kitap bulunamadıysa uyarı verelim
+            if (silinecekKitap == null)
+            {
+                MessageBox.Show("Belirtilen kitap bulunamadı.");
+                return;
             }
 
-        }
-    }
+            // Kitabı listeden silelim
+            kitaplar.Remove(silinecekKitap);
 
+            // Değişiklikleri kaydedelim
+            KutuphaneIslemleri.KitapKaydet(kitaplar);
+
+            MessageBox.Show("Kitap başarıyla silindi.");
+        }
+
+
+    }
+}

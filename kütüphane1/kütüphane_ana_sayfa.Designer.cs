@@ -40,7 +40,7 @@
             this.üye_ekle_btn.Size = new System.Drawing.Size(131, 77);
             this.üye_ekle_btn.TabIndex = 1;
             this.üye_ekle_btn.TabStop = false;
-            this.üye_ekle_btn.Text = "Üye Ekle";
+            this.üye_ekle_btn.Text = "Üye İşlemleri";
             this.üye_ekle_btn.UseVisualStyleBackColor = true;
             this.üye_ekle_btn.Click += new System.EventHandler(this.üye_ekle_btn_Click);
             // 
@@ -51,7 +51,7 @@
             this.kitap_ekle_btn.Size = new System.Drawing.Size(131, 77);
             this.kitap_ekle_btn.TabIndex = 1;
             this.kitap_ekle_btn.TabStop = false;
-            this.kitap_ekle_btn.Text = "Kitap Ekle";
+            this.kitap_ekle_btn.Text = "Kitap İşlemleri";
             this.kitap_ekle_btn.UseVisualStyleBackColor = true;
             this.kitap_ekle_btn.Click += new System.EventHandler(this.kitap_ekle_btn_Click);
             // 

@@ -35,6 +35,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.ekle2_btn = new System.Windows.Forms.Button();
+            this.kitap_sil_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox3
@@ -87,7 +88,7 @@
             // 
             // ekle2_btn
             // 
-            this.ekle2_btn.Location = new System.Drawing.Point(48, 182);
+            this.ekle2_btn.Location = new System.Drawing.Point(48, 180);
             this.ekle2_btn.Name = "ekle2_btn";
             this.ekle2_btn.Size = new System.Drawing.Size(224, 54);
             this.ekle2_btn.TabIndex = 3;
@@ -95,11 +96,22 @@
             this.ekle2_btn.UseVisualStyleBackColor = true;
             this.ekle2_btn.Click += new System.EventHandler(this.ekle2_btn_Click);
             // 
+            // kitap_sil_btn
+            // 
+            this.kitap_sil_btn.Location = new System.Drawing.Point(48, 240);
+            this.kitap_sil_btn.Name = "kitap_sil_btn";
+            this.kitap_sil_btn.Size = new System.Drawing.Size(224, 56);
+            this.kitap_sil_btn.TabIndex = 12;
+            this.kitap_sil_btn.Text = "Kitap Sil";
+            this.kitap_sil_btn.UseVisualStyleBackColor = true;
+            this.kitap_sil_btn.Click += new System.EventHandler(this.kitap_sil_btn_Click);
+            // 
             // Kitap_ekle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 277);
+            this.ClientSize = new System.Drawing.Size(332, 329);
+            this.Controls.Add(this.kitap_sil_btn);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
@@ -109,7 +121,7 @@
             this.Controls.Add(this.ekle2_btn);
             this.MaximizeBox = false;
             this.Name = "Kitap_ekle";
-            this.Text = "Kitap Ekle";
+            this.Text = "Kitap İşlemleri";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,5 +135,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ekle2_btn;
+        private System.Windows.Forms.Button kitap_sil_btn;
     }
 }
