@@ -47,6 +47,7 @@
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.textBox8 = new System.Windows.Forms.TextBox();
+            this.üyelere_bak_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // ekle1_btn
@@ -146,7 +147,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(319, 195);
+            this.label5.Location = new System.Drawing.Point(319, 111);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(57, 16);
             this.label5.TabIndex = 1;
@@ -155,7 +156,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(319, 283);
+            this.label6.Location = new System.Drawing.Point(319, 199);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(71, 16);
             this.label6.TabIndex = 1;
@@ -164,7 +165,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(319, 327);
+            this.label7.Location = new System.Drawing.Point(319, 243);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(78, 16);
             this.label7.TabIndex = 1;
@@ -173,7 +174,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(319, 239);
+            this.label8.Location = new System.Drawing.Point(319, 155);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(80, 16);
             this.label8.TabIndex = 1;
@@ -181,37 +182,48 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(416, 192);
+            this.textBox5.Location = new System.Drawing.Point(416, 108);
             this.textBox5.Name = "textBox5";
             this.textBox5.Size = new System.Drawing.Size(144, 22);
             this.textBox5.TabIndex = 2;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(416, 236);
+            this.textBox6.Location = new System.Drawing.Point(416, 152);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(144, 22);
             this.textBox6.TabIndex = 2;
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(416, 280);
+            this.textBox7.Location = new System.Drawing.Point(416, 196);
             this.textBox7.Name = "textBox7";
             this.textBox7.Size = new System.Drawing.Size(144, 22);
             this.textBox7.TabIndex = 2;
             // 
             // textBox8
             // 
-            this.textBox8.Location = new System.Drawing.Point(416, 324);
+            this.textBox8.Location = new System.Drawing.Point(416, 240);
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(144, 22);
             this.textBox8.TabIndex = 2;
+            // 
+            // üyelere_bak_btn
+            // 
+            this.üyelere_bak_btn.Location = new System.Drawing.Point(322, 284);
+            this.üyelere_bak_btn.Name = "üyelere_bak_btn";
+            this.üyelere_bak_btn.Size = new System.Drawing.Size(238, 62);
+            this.üyelere_bak_btn.TabIndex = 5;
+            this.üyelere_bak_btn.Text = "Üyeleri Görüntüle";
+            this.üyelere_bak_btn.UseVisualStyleBackColor = true;
+            this.üyelere_bak_btn.Click += new System.EventHandler(this.üyelere_bak_btn_Click);
             // 
             // Üye_ekle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 392);
+            this.Controls.Add(this.üyelere_bak_btn);
             this.Controls.Add(this.üye_güncelle_btn);
             this.Controls.Add(this.üye_sil_btn);
             this.Controls.Add(this.textBox8);
@@ -260,5 +272,6 @@
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.Button üyelere_bak_btn;
     }
 }

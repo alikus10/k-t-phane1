@@ -38,6 +38,7 @@
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker2 = new System.Windows.Forms.DateTimePicker();
             this.emanet_al_btn = new System.Windows.Forms.Button();
+            this.emanet_bak_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox2
@@ -124,11 +125,22 @@
             this.emanet_al_btn.UseVisualStyleBackColor = true;
             this.emanet_al_btn.Click += new System.EventHandler(this.emanet_al_btn_Click);
             // 
+            // emanet_bak_btn
+            // 
+            this.emanet_bak_btn.Location = new System.Drawing.Point(54, 370);
+            this.emanet_bak_btn.Name = "emanet_bak_btn";
+            this.emanet_bak_btn.Size = new System.Drawing.Size(238, 64);
+            this.emanet_bak_btn.TabIndex = 14;
+            this.emanet_bak_btn.Text = "Emanetleri Görüntüle";
+            this.emanet_bak_btn.UseVisualStyleBackColor = true;
+            this.emanet_bak_btn.Click += new System.EventHandler(this.emanet_bak_btn_Click);
+            // 
             // Emanet
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 403);
+            this.ClientSize = new System.Drawing.Size(332, 446);
+            this.Controls.Add(this.emanet_bak_btn);
             this.Controls.Add(this.emanet_al_btn);
             this.Controls.Add(this.dateTimePicker2);
             this.Controls.Add(this.dateTimePicker1);
@@ -158,5 +170,6 @@
         private System.Windows.Forms.DateTimePicker dateTimePicker1;
         private System.Windows.Forms.DateTimePicker dateTimePicker2;
         private System.Windows.Forms.Button emanet_al_btn;
+        private System.Windows.Forms.Button emanet_bak_btn;
     }
 }

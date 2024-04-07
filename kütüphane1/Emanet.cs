@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite;
 
 namespace kütüphane1
 {
@@ -24,11 +25,8 @@ namespace kütüphane1
             DateTime emanetTarihi = dateTimePicker1.Value;
             DateTime teslimTarihi = dateTimePicker2.Value;
 
-            List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
-            List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
-
-            Uye uye = uyeler.Find(u => u.Ad == uyeAd);
-            Kitap kitap = kitaplar.Find(k => k.ISBN == kitapISBN);
+            Uye uye = KutuphaneIslemleri.UyeOku().FirstOrDefault(u => u.Ad == uyeAd);
+            Kitap kitap = KutuphaneIslemleri.KitapOku().FirstOrDefault(k => k.ISBN == kitapISBN);
 
             if (uye == null || kitap == null)
             {
@@ -44,10 +42,20 @@ namespace kütüphane1
                 TeslimTarihi = teslimTarihi
             };
 
-            List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
-            emanetler.Add(yeniEmanet);
-
-            KutuphaneIslemleri.EmanetKaydet(emanetler);
+          
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string insertQuery = "INSERT INTO emanet (UyeAd, KitapISBN, EmanetTarihi, TeslimTarihi) VALUES (@UyeAd, @KitapISBN, @EmanetTarihi, @TeslimTarihi)";
+                using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UyeAd", yeniEmanet.Uye.Ad);
+                    cmd.Parameters.AddWithValue("@KitapISBN", yeniEmanet.Kitap.ISBN);
+                    cmd.Parameters.AddWithValue("@EmanetTarihi", yeniEmanet.EmanetTarihi);
+                    cmd.Parameters.AddWithValue("@TeslimTarihi", yeniEmanet.TeslimTarihi);
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
             MessageBox.Show("Emanet işlemi başarıyla gerçekleştirildi.");
         }
@@ -55,30 +63,71 @@ namespace kütüphane1
         private void emanet_al_btn_Click(object sender, EventArgs e)
         {
             // Seçilen üye adını ve kitap ISBN numarasını alalım
-            string uyeAd = textBox1.Text; // Üye adının textBox1'e girildiği varsayılarak
-            string kitapISBN = textBox2.Text; // Kitap ISBN numarasının textBox2'ye girildiği varsayılarak
+            string uyeAd = textBox1.Text; 
+            string kitapISBN = textBox2.Text;
 
-            // Kayıtlı emanetleri okuyalım
             List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
 
-            // Emaneti bulalım (üye adı ve kitap ISBN numarasına göre arama)
             Emanet alinacakEmanet = emanetler.Find(em => em.Uye.Ad == uyeAd && em.Kitap.ISBN == kitapISBN);
 
-            // Eğer böyle bir emanet bulunamadıysa uyarı verelim
             if (alinacakEmanet == null)
             {
                 MessageBox.Show("Belirtilen emanet bulunamadı.");
                 return;
             }
 
-            // Emaneti listeden kaldıralım
             emanetler.Remove(alinacakEmanet);
 
-            // Değişiklikleri kaydedelim
             KutuphaneIslemleri.EmanetKaydet(emanetler);
 
             MessageBox.Show("Emanet başarıyla geri alındı.");
         }
 
+        private void emanet_bak_btn_Click(object sender, EventArgs e)
+        {
+          
+                List<Emanet> emanetler;
+                using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+                {
+                    conn.Open();
+                    string selectQuery = "SELECT * FROM emanet";
+                    using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, conn))
+                    {
+                        using (SQLiteDataReader reader = cmd.ExecuteReader())
+                        {
+                            emanetler = new List<Emanet>();
+                            while (reader.Read())
+                            {
+                                Emanet emanet = new Emanet
+                                {
+                                    Uye = new Uye
+                                    {
+                                        Ad = reader["UyeAd"].ToString(),
+                                       
+                                    },
+                                    Kitap = new Kitap
+                                    {
+                                        ISBN = reader["KitapISBN"].ToString(),
+                                     
+                                    },
+                                    EmanetTarihi = Convert.ToDateTime(reader["EmanetTarihi"]),
+                                    TeslimTarihi = Convert.ToDateTime(reader["TeslimTarihi"])
+                                };
+                                emanetler.Add(emanet);
+                            }
+                        }
+                    }
+                }
+
+                // Çekilen emanetleri ekrana gösterelim
+                StringBuilder sb = new StringBuilder();
+                foreach (Emanet emanet in emanetler)
+                {
+                    sb.AppendLine($"Üye: {emanet.Uye.Ad}, Kitap ISBN: {emanet.Kitap.ISBN}, Emanet Tarihi: {emanet.EmanetTarihi}, Teslim Tarihi: {emanet.TeslimTarihi}");
+                }
+                MessageBox.Show(sb.ToString(), "Emanetler");
+            }
+
+        }
     }
-}
+

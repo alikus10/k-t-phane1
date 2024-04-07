@@ -36,6 +36,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ekle2_btn = new System.Windows.Forms.Button();
             this.kitap_sil_btn = new System.Windows.Forms.Button();
+            this.kitap_bak_btn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox3
@@ -106,11 +107,22 @@
             this.kitap_sil_btn.UseVisualStyleBackColor = true;
             this.kitap_sil_btn.Click += new System.EventHandler(this.kitap_sil_btn_Click);
             // 
+            // kitap_bak_btn
+            // 
+            this.kitap_bak_btn.Location = new System.Drawing.Point(48, 302);
+            this.kitap_bak_btn.Name = "kitap_bak_btn";
+            this.kitap_bak_btn.Size = new System.Drawing.Size(224, 56);
+            this.kitap_bak_btn.TabIndex = 13;
+            this.kitap_bak_btn.Text = "Kitapları Görüntüle";
+            this.kitap_bak_btn.UseVisualStyleBackColor = true;
+            this.kitap_bak_btn.Click += new System.EventHandler(this.kitap_bak_btn_Click);
+            // 
             // Kitap_ekle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 329);
+            this.ClientSize = new System.Drawing.Size(332, 370);
+            this.Controls.Add(this.kitap_bak_btn);
             this.Controls.Add(this.kitap_sil_btn);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
@@ -136,5 +148,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ekle2_btn;
         private System.Windows.Forms.Button kitap_sil_btn;
+        private System.Windows.Forms.Button kitap_bak_btn;
     }
 }

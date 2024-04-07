@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SQLite;
 
 namespace kütüphane1
 {
@@ -32,18 +33,39 @@ namespace kütüphane1
                 Telefon = telefon
             };
 
+            // Mevcut üyeleri al
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
+
+            // Yeni üyeyi listeye ekle
             uyeler.Add(yeniUye);
 
+            // Güncellenmiş üye listesini veritabanına kaydet
             KutuphaneIslemleri.UyeKaydet(uyeler);
+
+            // SQLite veritabanına sadece yeni üyeyi ekle
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string insertQuery = "INSERT INTO üye (Ad, Soyad, Email, Telefon) VALUES (@Ad, @Soyad, @Email, @Telefon)";
+                using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Ad", yeniUye.Ad);
+                    cmd.Parameters.AddWithValue("@Soyad", yeniUye.Soyad);
+                    cmd.Parameters.AddWithValue("@Email", yeniUye.Email);
+                    cmd.Parameters.AddWithValue("@Telefon", yeniUye.Telefon);
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
             MessageBox.Show("Üye başarıyla eklendi.");
 
+            // TextBox'ları temizle
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
             textBox4.Clear();
         }
+
 
         private void üye_sil_btn_Click(object sender, EventArgs e)
         {
@@ -111,6 +133,44 @@ namespace kütüphane1
             textBox7.Clear();
             textBox8.Clear();
         }
+
+        private void üyelere_bak_btn_Click(object sender, EventArgs e)
+        {
+            // SQLite veritabanından tüm üyeleri çek
+            List<Uye> uyeler;
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string selectQuery = "SELECT * FROM üye";
+                using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, conn))
+                {
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        uyeler = new List<Uye>();
+                        while (reader.Read())
+                        {
+                            Uye uye = new Uye
+                            {
+                                Ad = reader["Ad"].ToString(),
+                                Soyad = reader["Soyad"].ToString(),
+                                Email = reader["Email"].ToString(),
+                                Telefon = reader["Telefon"].ToString()
+                            };
+                            uyeler.Add(uye);
+                        }
+                    }
+                }
+            }
+
+            // Çekilen üyeleri ekrana göster
+            StringBuilder sb = new StringBuilder();
+            foreach (Uye uye in uyeler)
+            {
+                sb.AppendLine($"Ad: {uye.Ad}, Soyad: {uye.Soyad}, Email: {uye.Email}, Telefon: {uye.Telefon}");
+            }
+            MessageBox.Show(sb.ToString(), "Üyeler");
+        }
+
     }
 
 }

@@ -27,13 +27,15 @@ namespace kütüphane1
                 Directory.CreateDirectory("Data");
             }
         }
+       
+    
 
-        public static void UyeKaydet(List<Uye> uyeler)
+    public static void UyeKaydet(List<Uye> uyeler)
         {
             string json = JsonConvert.SerializeObject(uyeler);
             File.WriteAllText(UyeDosyaYolu, json);
         }
-
+    
         public static List<Uye> UyeOku()
         {
             if (File.Exists(UyeDosyaYolu))

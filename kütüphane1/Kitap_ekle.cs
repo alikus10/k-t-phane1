@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SQLite;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -20,61 +21,97 @@ namespace kütüphane1
 
         private void ekle2_btn_Click(object sender, EventArgs e)
         {
-
-            // Kullanıcı arayüzünden kitap bilgilerini alın
             string ad = textBox1.Text;
             string isbn = textBox2.Text;
             string yazar = textBox3.Text;
 
-            // Alınan bilgilerle yeni bir Kitap nesnesi oluşturun
             Kitap yeniKitap = new Kitap
             {
                 ISBN = isbn,
                 Ad = ad,
-                Yazar = yazar,
-
+                Yazar = yazar
             };
 
-            // Mevcut kitaplar listesini alın
             List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
 
-            // Yeni kitabı mevcut kitaplar listesine ekleyin
             kitaplar.Add(yeniKitap);
 
-            // Güncellenmiş kitaplar listesini JSON dosyasına kaydedin
             KutuphaneIslemleri.KitapKaydet(kitaplar);
 
-            // Kullanıcıya ekleme işleminin başarıyla gerçekleştirildiğine dair bir mesaj gösterin
             MessageBox.Show("Kitap başarıyla eklendi.");
+
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string insertQuery = "INSERT INTO kitap (ISBN, Ad, Yazar) VALUES (@ISBN, @Ad, @Yazar)";
+                using (SQLiteCommand cmd = new SQLiteCommand(insertQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ISBN", yeniKitap.ISBN);
+                    cmd.Parameters.AddWithValue("@Ad", yeniKitap.Ad);
+                    cmd.Parameters.AddWithValue("@Yazar", yeniKitap.Yazar);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
         }
+    
         private void kitap_sil_btn_Click(object sender, EventArgs e)
         {
-            // Silmek istediğimiz kitabın adını ve ISBN numarasını alalım
-            string kitapAdi = textBox1.Text; // Kitabın adının textBox1'e girildiği varsayılarak
-            string kitapISBN = textBox2.Text; // Kitabın ISBN numarasının textBox2'ye girildiği varsayılarak
+            string kitapAdi = textBox1.Text; 
+            string kitapISBN = textBox2.Text; 
 
-            // Kayıtlı kitapları okuyalım
             List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
 
-            // Silmek istediğimiz kitabı bulalım (ad ve ISBN numarasına göre arama)
             Kitap silinecekKitap = kitaplar.Find(k => k.Ad == kitapAdi && k.ISBN == kitapISBN);
 
-            // Eğer böyle bir kitap bulunamadıysa uyarı verelim
             if (silinecekKitap == null)
             {
                 MessageBox.Show("Belirtilen kitap bulunamadı.");
                 return;
             }
 
-            // Kitabı listeden silelim
             kitaplar.Remove(silinecekKitap);
 
-            // Değişiklikleri kaydedelim
             KutuphaneIslemleri.KitapKaydet(kitaplar);
 
             MessageBox.Show("Kitap başarıyla silindi.");
         }
 
+        private void kitap_bak_btn_Click(object sender, EventArgs e)
+        {
+            List<Kitap> kitaplar;
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string selectQuery = "SELECT * FROM kitap";
+                using (SQLiteCommand cmd = new SQLiteCommand(selectQuery, conn))
+                {
+                    using (SQLiteDataReader reader = cmd.ExecuteReader())
+                    {
+                        kitaplar = new List<Kitap>();
+                        while (reader.Read())
+                        {
+                            Kitap kitap = new Kitap
+                            {
+                                ISBN = reader["ISBN"].ToString(),
+                                Ad = reader["Ad"].ToString(),
+                                Yazar = reader["Yazar"].ToString()
+                            };
+                            kitaplar.Add(kitap);
+                        }
+                    }
+                }
+            }
 
+            // Çekilen kitapları ekrana göster
+            StringBuilder sb = new StringBuilder();
+            foreach (Kitap kitap in kitaplar)
+            {
+                sb.AppendLine($"ISBN: {kitap.ISBN}, Ad: {kitap.Ad}, Yazar: {kitap.Yazar}");
+            }
+            MessageBox.Show(sb.ToString(), "Kitaplar");
+        }
     }
 }
