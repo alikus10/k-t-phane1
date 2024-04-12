@@ -62,9 +62,14 @@ namespace kütüphane1
 
         private void emanet_al_btn_Click(object sender, EventArgs e)
         {
-            // Seçilen üye adını ve kitap ISBN numarasını alalım
-            string uyeAd = textBox1.Text; 
+            string uyeAd = textBox1.Text;
             string kitapISBN = textBox2.Text;
+
+            if (string.IsNullOrWhiteSpace(uyeAd) || string.IsNullOrWhiteSpace(kitapISBN))
+            {
+                MessageBox.Show("Lütfen üye adı ve kitap ISBN alanlarını doldurun.");
+                return;
+            }
 
             List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
 
@@ -77,11 +82,14 @@ namespace kütüphane1
             }
 
             emanetler.Remove(alinacakEmanet);
-
             KutuphaneIslemleri.EmanetKaydet(emanetler);
 
             MessageBox.Show("Emanet başarıyla geri alındı.");
+
+            textBox1.Clear();
+            textBox2.Clear();
         }
+
 
         private void emanet_bak_btn_Click(object sender, EventArgs e)
         {
@@ -119,7 +127,6 @@ namespace kütüphane1
                     }
                 }
 
-                // Çekilen emanetleri ekrana gösterelim
                 StringBuilder sb = new StringBuilder();
                 foreach (Emanet emanet in emanetler)
                 {
