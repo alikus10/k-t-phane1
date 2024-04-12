@@ -25,6 +25,13 @@ namespace kütüphane1
             string e_mail = textBox3.Text;
             string telefon = textBox4.Text;
 
+            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(soyad) 
+                || string.IsNullOrWhiteSpace(e_mail) || string.IsNullOrWhiteSpace(telefon))
+            {
+                MessageBox.Show("Lütfen tüm alanları doldurun.");
+                return;
+            }
+
             Uye yeniUye = new Uye
             {
                 Ad = ad,
@@ -33,16 +40,15 @@ namespace kütüphane1
                 Telefon = telefon
             };
 
-            // Mevcut üyeleri al
+           
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
 
-            // Yeni üyeyi listeye ekle
             uyeler.Add(yeniUye);
 
-            // Güncellenmiş üye listesini veritabanına kaydet
+          
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
-            // SQLite veritabanına sadece yeni üyeyi ekle
+            
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
             {
                 conn.Open();
@@ -59,7 +65,6 @@ namespace kütüphane1
 
             MessageBox.Show("Üye başarıyla eklendi.");
 
-            // TextBox'ları temizle
             textBox1.Clear();
             textBox2.Clear();
             textBox3.Clear();
@@ -71,6 +76,12 @@ namespace kütüphane1
         {
             string ad = textBox1.Text;
             string soyad = textBox2.Text;
+
+            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(soyad))
+            {
+                MessageBox.Show("Lütfen ad ve soyad alanlarını doldurun.");
+                return;
+            }
 
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
 
@@ -91,41 +102,68 @@ namespace kütüphane1
             textBox2.Clear();
         }
 
+
+
         private void üye_güncelle_btn_Click(object sender, EventArgs e)
         {
             string ad = textBox1.Text;
             string soyad = textBox2.Text;
-
-            List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
-
-            Uye güncellenecekUye = uyeler.Find(u => u.Ad == ad && u.Soyad == soyad);
-
-            if (güncellenecekUye == null)
-            {
-                MessageBox.Show("Belirtilen üye bulunamadı.");
-                return;
-            }
-
             string yeniAd = textBox5.Text;
             string yeniSoyad = textBox6.Text;
             string yeniEmail = textBox7.Text;
             string yeniTelefon = textBox8.Text;
 
-            if (string.IsNullOrWhiteSpace(yeniAd) || string.IsNullOrWhiteSpace(yeniSoyad) || string.IsNullOrWhiteSpace(yeniEmail) || string.IsNullOrWhiteSpace(yeniTelefon))
+            if (string.IsNullOrWhiteSpace(yeniAd) || string.IsNullOrWhiteSpace(yeniSoyad) 
+                || string.IsNullOrWhiteSpace(yeniEmail) || string.IsNullOrWhiteSpace(yeniTelefon))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun.");
                 return;
             }
 
-            güncellenecekUye.Ad = yeniAd;
-            güncellenecekUye.Soyad = yeniSoyad;
-            güncellenecekUye.Email = yeniEmail;
-            güncellenecekUye.Telefon = yeniTelefon;
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
 
+                string updateQuery = "UPDATE üye SET Ad = @YeniAd, Soyad = @YeniSoyad, Email = @YeniEmail, Telefon = @YeniTelefon WHERE Ad = @Ad AND Soyad = @Soyad";
+                using (SQLiteCommand cmd = new SQLiteCommand(updateQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@YeniAd", yeniAd);
+                    cmd.Parameters.AddWithValue("@YeniSoyad", yeniSoyad);
+                    cmd.Parameters.AddWithValue("@YeniEmail", yeniEmail);
+                    cmd.Parameters.AddWithValue("@YeniTelefon", yeniTelefon);
+                    cmd.Parameters.AddWithValue("@Ad", ad);
+                    cmd.Parameters.AddWithValue("@Soyad", soyad);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+                    if (rowsAffected == 0)
+                    {
+                        MessageBox.Show("Belirtilen üye bulunamadı.");
+                        return;
+                    }
+                }
+            }
+
+            List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
+
+            foreach (Uye uye in uyeler)
+            {
+                if (uye.Ad == ad && uye.Soyad == soyad)
+                {
+                    uye.Ad = yeniAd;
+                    uye.Soyad = yeniSoyad;
+                    uye.Email = yeniEmail;
+                    uye.Telefon = yeniTelefon;
+                    break;
+                }
+            }
+
+         
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
+         
             MessageBox.Show("Üye bilgileri başarıyla güncellendi.");
 
+         
             textBox1.Clear();
             textBox2.Clear();
             textBox5.Clear();
@@ -133,10 +171,8 @@ namespace kütüphane1
             textBox7.Clear();
             textBox8.Clear();
         }
-
         private void üyelere_bak_btn_Click(object sender, EventArgs e)
         {
-            // SQLite veritabanından tüm üyeleri çek
             List<Uye> uyeler;
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
             {
@@ -162,7 +198,6 @@ namespace kütüphane1
                 }
             }
 
-            // Çekilen üyeleri ekrana göster
             StringBuilder sb = new StringBuilder();
             foreach (Uye uye in uyeler)
             {
