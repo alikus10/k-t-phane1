@@ -42,7 +42,7 @@ namespace kütüphane1
                 TeslimTarihi = teslimTarihi
             };
 
-          
+            // SQLite veritabanına ekleme
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
             {
                 conn.Open();
@@ -57,7 +57,14 @@ namespace kütüphane1
                 }
             }
 
+            // JSON dosyasına ekleme
+            List<Emanet> emanetler = KutuphaneIslemleri.EmanetOku();
+            emanetler.Add(yeniEmanet);
+            KutuphaneIslemleri.EmanetKaydet(emanetler);
+
             MessageBox.Show("Emanet işlemi başarıyla gerçekleştirildi.");
+            textBox1.Clear();
+            textBox2.Clear();
         }
 
         private void emanet_al_btn_Click(object sender, EventArgs e)
@@ -81,7 +88,20 @@ namespace kütüphane1
                 return;
             }
 
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string deleteQuery = "DELETE FROM emanet WHERE UyeAd = @UyeAd AND KitapISBN = @KitapISBN";
+                using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UyeAd", uyeAd);
+                    cmd.Parameters.AddWithValue("@KitapISBN", kitapISBN);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             emanetler.Remove(alinacakEmanet);
+
             KutuphaneIslemleri.EmanetKaydet(emanetler);
 
             MessageBox.Show("Emanet başarıyla geri alındı.");
@@ -89,6 +109,7 @@ namespace kütüphane1
             textBox1.Clear();
             textBox2.Clear();
         }
+
 
 
         private void emanet_bak_btn_Click(object sender, EventArgs e)

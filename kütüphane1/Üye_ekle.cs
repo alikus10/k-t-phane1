@@ -25,7 +25,7 @@ namespace kütüphane1
             string e_mail = textBox3.Text;
             string telefon = textBox4.Text;
 
-            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(soyad) 
+            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(soyad)
                 || string.IsNullOrWhiteSpace(e_mail) || string.IsNullOrWhiteSpace(telefon))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun.");
@@ -40,15 +40,15 @@ namespace kütüphane1
                 Telefon = telefon
             };
 
-           
+
             List<Uye> uyeler = KutuphaneIslemleri.UyeOku();
 
             uyeler.Add(yeniUye);
 
-          
+
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
-            
+
             using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
             {
                 conn.Open();
@@ -93,7 +93,20 @@ namespace kütüphane1
                 return;
             }
 
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string deleteQuery = "DELETE FROM üye WHERE Ad = @Ad AND Soyad = @Soyad";
+                using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Ad", ad);
+                    cmd.Parameters.AddWithValue("@Soyad", soyad);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             uyeler.Remove(silinecekUye);
+
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
             MessageBox.Show("Üye başarıyla silindi.");
@@ -113,7 +126,7 @@ namespace kütüphane1
             string yeniEmail = textBox7.Text;
             string yeniTelefon = textBox8.Text;
 
-            if (string.IsNullOrWhiteSpace(yeniAd) || string.IsNullOrWhiteSpace(yeniSoyad) 
+            if (string.IsNullOrWhiteSpace(yeniAd) || string.IsNullOrWhiteSpace(yeniSoyad)
                 || string.IsNullOrWhiteSpace(yeniEmail) || string.IsNullOrWhiteSpace(yeniTelefon))
             {
                 MessageBox.Show("Lütfen tüm alanları doldurun.");
@@ -157,13 +170,13 @@ namespace kütüphane1
                 }
             }
 
-         
+
             KutuphaneIslemleri.UyeKaydet(uyeler);
 
-         
+
             MessageBox.Show("Üye bilgileri başarıyla güncellendi.");
 
-         
+
             textBox1.Clear();
             textBox2.Clear();
             textBox5.Clear();

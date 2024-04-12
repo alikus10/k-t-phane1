@@ -92,7 +92,20 @@ namespace kütüphane1
                 return;
             }
 
+            using (SQLiteConnection conn = new SQLiteConnection("Data Source=kütüphane.db;Version=3;"))
+            {
+                conn.Open();
+                string deleteQuery = "DELETE FROM kitap WHERE Ad = @Ad AND ISBN = @ISBN";
+                using (SQLiteCommand cmd = new SQLiteCommand(deleteQuery, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Ad", kitapAdi);
+                    cmd.Parameters.AddWithValue("@ISBN", kitapISBN);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+
             kitaplar.Remove(silinecekKitap);
+
             KutuphaneIslemleri.KitapKaydet(kitaplar);
 
             MessageBox.Show("Kitap başarıyla silindi.");
@@ -100,6 +113,7 @@ namespace kütüphane1
             textBox1.Clear();
             textBox2.Clear();
         }
+
 
 
 
