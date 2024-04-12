@@ -25,28 +25,14 @@ namespace kütüphane1
             string isbn = textBox2.Text;
             string yazar = textBox3.Text;
 
-            if (string.IsNullOrWhiteSpace(ad) || string.IsNullOrWhiteSpace(isbn) || string.IsNullOrWhiteSpace(yazar))
-            {
-                MessageBox.Show("Lütfen tüm alanları doldurun.");
-                return;
-            }
-
-           
-            List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
-
-            // Eğer aynı ISBN numarasına sahip kitap zaten varsa hata mesajı göster 
-            if (kitaplar.Any(k => k.ISBN == isbn))
-            {
-                MessageBox.Show("Bu ISBN numarasına sahip kitap zaten mevcut.");
-                return;
-            }
-
             Kitap yeniKitap = new Kitap
             {
                 ISBN = isbn,
                 Ad = ad,
                 Yazar = yazar
             };
+
+            List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
 
             kitaplar.Add(yeniKitap);
 
@@ -70,17 +56,11 @@ namespace kütüphane1
             textBox2.Clear();
             textBox3.Clear();
         }
-
+    
         private void kitap_sil_btn_Click(object sender, EventArgs e)
         {
-            string kitapAdi = textBox1.Text;
-            string kitapISBN = textBox2.Text;
-
-            if (string.IsNullOrWhiteSpace(kitapAdi) || string.IsNullOrWhiteSpace(kitapISBN))
-            {
-                MessageBox.Show("Lütfen kitap adı ve ISBN alanlarını doldurun.");
-                return;
-            }
+            string kitapAdi = textBox1.Text; 
+            string kitapISBN = textBox2.Text; 
 
             List<Kitap> kitaplar = KutuphaneIslemleri.KitapOku();
 
@@ -93,15 +73,11 @@ namespace kütüphane1
             }
 
             kitaplar.Remove(silinecekKitap);
+
             KutuphaneIslemleri.KitapKaydet(kitaplar);
 
             MessageBox.Show("Kitap başarıyla silindi.");
-
-            textBox1.Clear();
-            textBox2.Clear();
         }
-
-
 
         private void kitap_bak_btn_Click(object sender, EventArgs e)
         {
